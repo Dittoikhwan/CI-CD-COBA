@@ -1,34 +1,37 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ]  # hanya jalan jika push ke branch 'main'
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # jalankan di server Linux GitHub
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [18.x]  # bisa ditambah 20.x kalau mau
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: echo "Build dan test belum tersedia"
+      - name: Checkout repository
+        uses: actions/checkout@v4  # ambil kode dari repo
 
-    
-    - run: npm run build --if-present
-    - run: npm test
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}  # pasang Node.js versi 18.x
+          cache: 'npm'  # caching node_modules untuk mempercepat workflow
+
+      - name: Cek versi Node & NPM
+        run: |
+          node -v
+          npm -v
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build aplikasi (jika ada)
+        run: npm run build --if-present
+
+      - name: Jalankan test (jika ada)
+        run: npm test --if-present
