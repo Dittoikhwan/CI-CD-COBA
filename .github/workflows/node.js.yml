@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]  # bisa ditambah 20.x kalau mau
+        node-version: [18.x, 20.x]  # bisa ditambah 20.x kalau mau
 
     steps:
       - name: Checkout repository
